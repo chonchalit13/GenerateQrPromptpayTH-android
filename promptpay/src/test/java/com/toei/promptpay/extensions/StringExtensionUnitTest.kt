@@ -58,27 +58,27 @@ class StringExtensionUnitTest {
     @Test
     fun testConvertStringToQrPromptPayBitmap() {
         val resultData = PromptPayGenerate.generate("0991237283", "1000.00")
-        val resultBitmap = resultData.toQrPromptPay(600)
+        val resultBitmap = resultData?.toQrPromptPay(600)
 
-        val intArray = IntArray(resultBitmap.width * resultBitmap.height)
-        resultBitmap.getPixels(
-            intArray,
-            0,
-            resultBitmap.width,
-            0,
-            0,
-            resultBitmap.width,
-            resultBitmap.height
-        )
+        resultBitmap?.let {
+            val intArray = IntArray(resultBitmap.width * resultBitmap.height)
+            resultBitmap.getPixels(
+                intArray,
+                0,
+                resultBitmap.width,
+                0,
+                0,
+                resultBitmap.width,
+                resultBitmap.height
+            )
 
-        val source: LuminanceSource =
-            RGBLuminanceSource(resultBitmap.width, resultBitmap.height, intArray)
+            val source: LuminanceSource =
+                RGBLuminanceSource(resultBitmap.width, resultBitmap.height, intArray)
 
-        val bitmap = BinaryBitmap(HybridBinarizer(source))
-        val result = QRCodeReader().decode(bitmap).toString()
+            val bitmap = BinaryBitmap(HybridBinarizer(source))
+            val result = QRCodeReader().decode(bitmap).toString()
 
-        assertEquals(resultData, result)
-        assertEquals(600, resultBitmap.width)
-        assertEquals(600, resultBitmap.height)
+            assertEquals(resultData, result)
+        }
     }
 }

@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val resultBitmap = PromptPayGenerate.generate("0991237283", "1000.00").toQrPromptPay(600)
+        val resultBitmap = PromptPayGenerate.generate("0991237283", "1000.00")?.toQrPromptPay(600)
 
         binding.imgQr.setImageBitmap(resultBitmap)
     }

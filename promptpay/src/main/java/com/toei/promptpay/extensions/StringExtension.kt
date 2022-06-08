@@ -24,11 +24,11 @@ fun String.toQrPromptPay(size: Int): Bitmap {
     val bitMatrixWidth = bitMatrix.width
     val bitMatrixHeight = bitMatrix.height
 
-    val bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_8888)
+    val rawBitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_8888)
 
     for (y in 0 until bitMatrixHeight) {
         for (x in 0 until bitMatrixWidth) {
-            bitmap.setPixel(
+            rawBitmap.setPixel(
                 x,
                 y,
                 if (bitMatrix.get(x, y)) Color.parseColor("#000000")
@@ -37,5 +37,15 @@ fun String.toQrPromptPay(size: Int): Bitmap {
         }
     }
 
-    return bitmap
+    val w = rawBitmap.width - 140
+    val h = rawBitmap.height - 140
+
+
+    return Bitmap.createBitmap(
+        rawBitmap,
+        70,
+        70,
+        w,
+        h
+    )
 }

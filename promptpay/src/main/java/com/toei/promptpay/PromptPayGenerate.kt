@@ -14,17 +14,21 @@ class PromptPayGenerate {
         private var ppAmount = ""
         private const val ppCheckSum = "6304"
 
-        fun generate(accountNumber: String, amount: String = ""): String {
-            ppMerchantAccountId = generateMerchantAccountId(accountNumber = accountNumber)
+        fun generate(accountNumber: String, amount: String = ""): String? {
+            return if (accountNumber.length >= 10) {
+                ppMerchantAccountId = generateMerchantAccountId(accountNumber = accountNumber)
 
-            if (amount.isNotEmpty()) {
-                ppAmount = String.format("54%02d%s", amount.length, amount)
+                if (amount.isNotEmpty()) {
+                    ppAmount = String.format("54%02d%s", amount.length, amount)
+                }
+
+                val generatePromptPay =
+                    "$ppPayloadVersion$ppPaymentMethod$ppMerchantAid$ppMerchantAccountId$ppCountry$ppCurrency$ppAmount$ppCheckSum"
+
+                "$generatePromptPay${checkSum(generatePromptPay)}"
+            } else {
+                null
             }
-
-            val generatePromptPay =
-                "$ppPayloadVersion$ppPaymentMethod$ppMerchantAid$ppMerchantAccountId$ppCountry$ppCurrency$ppAmount$ppCheckSum"
-
-            return "$generatePromptPay${checkSum(generatePromptPay)}"
         }
 
         private fun generateMerchantAccountId(accountNumber: String): String {
